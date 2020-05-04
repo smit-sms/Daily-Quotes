@@ -8,3 +8,8 @@ A Flask application that renders quotes based on analyzed sentiments of quotes d
 * Mobile Friendly
 * Sentiment based quote delivery
 * Can add more quotes in the `quotes.csv` file by pasting the quote along with the author name
+
+
+### Screenshot:
+
+![INDEX PAGE](./static/images/ss.jpg)
