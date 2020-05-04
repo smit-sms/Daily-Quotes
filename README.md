@@ -12,4 +12,6 @@ A Flask application that renders quotes based on analyzed sentiments of quotes d
 
 ### Screenshot:
 
-![INDEX PAGE](./static/images/ss.jpg = 250*250)
+![INDEX PAGE](./static/images/ss.jpg=250x250)
+
+<img src="./static/images/ss.jpg" width="48">
