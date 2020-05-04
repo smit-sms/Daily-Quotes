@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Your Daily Quotes</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+	crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href='https://fonts.googleapis.com/css?family=Merienda+One' rel='stylesheet' type='text/css'>
+	<link rel="shortcut icon" type="image/png" href="https://img.icons8.com/doodle/48/000000/quote.png"/>
+	<style>
+		.card-body, .card-header{
+			font-family: "Merienda One";
+			font-size: 30px;
+			font-style: normal;
+			font-variant: normal;
+			font-weight: 200;
+			line-height: 1.2;
+		}
+		body{
+			color: white;
+			background-color: #000;
+			vertical-align: middle;
+			position: relative;
+		}
+
+		#snackbar {
+		  	visibility: hidden;
+		  	min-width: 250px;
+		  	background-color: #333;
+		  	color: #fff;
+			text-align: center;
+			border-radius: 2px;
+			padding: 16px;
+			position: fixed;
+			z-index: 1;
+			left: 5%;
+			right: 5%;
+			bottom: 30px;
+		  	font-size: 15px;
+		}
+
+		#snackbar.show {
+	  		visibility: visible;
+		  	-webkit-animation: fadein 0.5s, fadeout 2.5s 6.5s;
+		  	animation: fadein 0.5s, fadeout 2.5s 6.5s;
+		}
+
+		@-webkit-keyframes fadein {
+	  		from {bottom: 0; opacity: 0;}
+		  	to {bottom: 30px; opacity: 1;}
+		}
+
+		@keyframes fadein {
+	  		from {bottom: 0; opacity: 0;}
+		  	to {bottom: 30px; opacity: 1;}
+		}
+
+		@-webkit-keyframes fadeout {
+	  		from {bottom: 30px; opacity: 1;}
+		  	to {bottom: 0; opacity: 0;}
+		}
+
+		@keyframes fadeout {
+	  		from {bottom: 30px; opacity: 1;}
+	  		to {bottom: 0; opacity: 0;}
+		}
+
+	</style>
+</head>
+<body onload="myFunction()">
+	<div align="center" style="margin-top: 50px;" class="container">
+		<div class="card bg-transparent">
+			<div class="card-header bg-transparent">
+				<h1>INSPIRE ME!</h1>
+			</div><br>
+		  	<div class="card-body">
+		  		<div id="quote" class="quote">
+			    	<p class="card-title">{{quote}}</p><br>
+			    	<h4 class="card-text">- {{author}}</h4>
+		    	</div>
+		  	</div><br>
+		  	<div class="card-footer bg-transparent">
+		  		<form id='myform' action="{{ url_for('quote_me') }}" method='GET'>
+			  		<p>
+				  		<button class="btn" type="submit" name='darker' id="darker" value='{{current_id}}'>
+				  			<img src='static/images/moon.png' style="width:80px" />
+				  		</button>
+				  		<img src='static/images/hand.png' id='hand' style="width:60px" />
+				  		<button class="btn" name='brighter' id="brighter" type="submit" value='{{current_id}}'>
+				  			<img src='static/images/sun.svg'  style="width:80px" />
+				  		</button>
+			  		</p>
+			  	</form>
+		  	</div>
+		</div>
+	</div>
+
+	<div id="snackbar">Press the Sun to go brighter on Quote or Moon to go darker. You can also swipe on quote in either directions to do the same :)</div>
+
+
+</body>
+</html>
+<script type="text/javascript">
+    function swipedetect(el, callback){
+        var touchsurface = el,
+        swipedir,
+        startX,
+        startY,
+        distX,
+        distY,
+        threshold = 150, //required min distance traveled to be considered swipe
+        restraint = 100, // maximum distance allowed at the same time in perpendicular direction
+        allowedTime = 300, // maximum time allowed to travel that distance
+        elapsedTime,
+        startTime,
+        handleswipe = callback || function(swipedir){}
+
+        touchsurface.addEventListener('touchstart', function(e){
+            var touchobj = e.changedTouches[0]
+            swipedir = 'none'
+            dist = 0
+            startX = touchobj.pageX
+            startY = touchobj.pageY
+            startTime = new Date().getTime() // record time when finger first makes contact with surface
+            // e.preventDefault()
+        }, false)
+
+        touchsurface.addEventListener('touchmove', function(e){
+            // e.preventDefault() // prevent scrolling when inside DIV
+        }, false)
+
+        touchsurface.addEventListener('touchend', function(e){
+            var touchobj = e.changedTouches[0]
+            distX = touchobj.pageX - startX // get horizontal dist traveled by finger while in contact with surface
+            distY = touchobj.pageY - startY // get vertical dist traveled by finger while in contact with surface
+            elapsedTime = new Date().getTime() - startTime // get time elapsed
+            if (elapsedTime <= allowedTime){ // first condition for awipe met
+                if (Math.abs(distX) >= threshold && Math.abs(distY) <= restraint){ // 2nd condition for horizontal swipe met
+                    swipedir = (distX < 0)? 'left' : 'right' // if dist traveled is negative, it indicates left swipe
+                }
+                else if (Math.abs(distY) >= threshold && Math.abs(distX) <= restraint){ // 2nd condition for vertical swipe met
+                    swipedir = (distY < 0)? 'up' : 'down' // if dist traveled is negative, it indicates up swipe
+                }
+            }
+            handleswipe(swipedir)
+            e.preventDefault()
+        }, false)
+    }
+
+    //USAGE:
+    var el = document.getElementById('quote');
+    swipedetect(el, function(swipedir){
+        // swipedir contains either "none", "left", "right", "top", or "down"
+        if (swipedir == "left") {
+            document.getElementById("brighter").click();
+        }
+        else if (swipedir == "right")  {
+            document.getElementById("darker").click();
+        }
+    });
+
+    var hand = document.getElementById('hand');
+    swipedetect(hand, function(swipedir){
+        // swipedir contains either "none", "left", "right", "top", or "down"
+        if (swipedir == "right") {
+            document.getElementById("brighter").click();
+        }
+        else if (swipedir == "left")  {
+            document.getElementById("darker").click();
+        }
+    });
+
+    function myFunction() {
+    	var url = window.location.href;
+		if(!(url.indexOf('darker') > -1 || url.indexOf('brighter') > -1)){
+			var x = document.getElementById("snackbar");
+		  	x.className = "show";
+		  	setTimeout(function(){ x.className = x.className.replace("show", ""); }, 8000);
+	  	}
+	}
+</script>
